@@ -7,6 +7,8 @@ eventListener()
 
 function eventListener() {
     document.addEventListener("DOMContentLoaded", askAboutBudget) 
+
+    form.addEventListener("submit", addExpenditure)
 }
 
 
@@ -20,7 +22,37 @@ class Budget {
 }
 
 class UI {
+    insertBudget(quantity) {
+        //The first step is add the value
+        const { budget, remainder} = quantity
 
+        //The second step is add the value to the HTML
+        document.querySelector("#total").textContent = budget
+        document.querySelector("#restante").textContent = remainder
+    }
+
+    printAlert(message, typeOfMessage) {
+        //To create the div
+        const divMessage = document.createElement("div")
+        divMessage.classList.add("text-center", "alert") //Bootstrap classes
+        
+        if(typeOfMessage === "error") {
+            divMessage.classList.add("alert-danger")
+        } else {
+            divMessage.classList.add("alert-success")
+        }
+
+        //Error message
+        divMessage.textContent = message
+
+        //Insert in the HTML
+        document.querySelector(".primario").insertBefore(divMessage, form)
+
+        //Take out from HTML
+        setTimeout(() => {
+            divMessage.remove()
+        }, 3000)
+    }
 }
 
 //Instance
@@ -39,5 +71,30 @@ function askAboutBudget() {
     }
 
     budget = new Budget(userBudget)
-    console.log(budget)
+    
+    ui.insertBudget(budget)
+}
+
+//Adding expenses
+function addExpenditure(e) {
+    e.preventDefault()
+
+    //Read the form datas
+    const expenditureName = document.querySelector("#gasto").value
+    const expenditureQuantity = document.querySelector("#cantidad").value
+
+    //Validate
+    if(expenditureName === "" || expenditureQuantity === "") {
+        ui.printAlert("Both fields are mandatory", "error")
+
+        return
+
+    } else if (expenditureQuantity <= 0 || isNaN(expenditureQuantity)) {
+        ui.printAlert("Quantity is not valid", "error")
+
+        return
+
+    }
+
+    console.log("Adding expenditure")
 }
