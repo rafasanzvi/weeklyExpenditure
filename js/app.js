@@ -11,6 +11,22 @@ function eventListener() {
 
 
 //Classes
+class Budget {
+    constructor(budget) {
+        this.budget = Number(budget)
+        this.remainder = Number(budget)
+        this.expenses = []
+    }
+}
+
+class UI {
+
+}
+
+//Instance
+const ui = new UI()
+
+let budget
 
 
 //Functions
@@ -21,4 +37,7 @@ function askAboutBudget() {
     if(userBudget === "" || userBudget === null || isNaN(userBudget) || userBudget <= 0) {
         window.location.reload()
     }
+
+    budget = new Budget(userBudget)
+    console.log(budget)
 }
