@@ -19,6 +19,11 @@ class Budget {
         this.remainder = Number(budget)
         this.expenses = []
     }
+
+    addExpenses(expenditure) {
+        this.expenses = [...this.expenses, expenditure]
+        console.log("I am the expenses object", this.expenses)
+    }
 }
 
 class UI {
@@ -81,7 +86,7 @@ function addExpenditure(e) {
 
     //Read the form datas
     const expenditureName = document.querySelector("#gasto").value
-    const expenditureQuantity = document.querySelector("#cantidad").value
+    const expenditureQuantity = Number(document.querySelector("#cantidad").value)
 
     //Validate
     if(expenditureName === "" || expenditureQuantity === "") {
@@ -96,5 +101,13 @@ function addExpenditure(e) {
 
     }
 
-    console.log("Adding expenditure")
+    //To create an object with the expenditure
+    const expenditure = {expenditureName, expenditureQuantity, id: Date.now()}
+    
+    budget.addExpenses(expenditure)
+
+    ui.printAlert("Expenditure added correctly")
+
+    form.reset()
 }
+
