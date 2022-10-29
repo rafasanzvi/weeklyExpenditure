@@ -58,6 +58,46 @@ class UI {
             divMessage.remove()
         }, 3000)
     }
+
+    addExpenditureList(expenses) {
+
+        //This is to call the cleanHTML method through expenses(it is part of the budget object)
+        this.cleanHTML()
+        
+        //Iterate over expenditure
+        expenses.forEach(expenditure => {
+            
+            const { expenditureName, expenditureQuantity, id } = expenditure
+
+            //To create a LI
+            const newExpenditure = document.createElement("li")
+            newExpenditure.className = "list-group-item d-flex justify-content-between align-items-center"
+            //This two codes to do the same, the only difference is that set attribute is oldest
+            // newExpenditure.setAttribute("data-id", id)
+            newExpenditure.dataset.id = id
+
+            //Add the expenditure HTML
+            newExpenditure.innerHTML = `${expenditureName} <span class="badge badge-primary badge-pill"> ${expenditureQuantity} </span>`
+
+            //Buttom to delete the expenditure
+            const btnDelete = document.createElement("button")
+            btnDelete.classList.add("btn", "btn-danger", "borrar-gasto")
+            btnDelete.innerHTML = "Delete &times"
+
+            newExpenditure.appendChild(btnDelete)
+
+            //Add the HTML
+            expenditureList.appendChild(newExpenditure)
+        });
+    }
+
+    //We have to create a function to clean HTML, because otherwise the append child will repeat the expenses
+    cleanHTML() {
+        //While expenditure list have something remove his content
+        while(expenditureList.firstChild) {
+            expenditureList.remove(expenditureList.firstChild)
+        }
+    }
 }
 
 //Instance
@@ -107,6 +147,10 @@ function addExpenditure(e) {
     budget.addExpenses(expenditure)
 
     ui.printAlert("Expenditure added correctly")
+
+    //Print the expenditure
+    const { expenses } = budget
+    ui.addExpenditureList(expenses)
 
     form.reset()
 }
