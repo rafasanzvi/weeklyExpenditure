@@ -94,8 +94,8 @@ class UI {
     //We have to create a function to clean HTML, because otherwise the append child will repeat the expenses
     cleanHTML() {
         //While expenditure list have something remove his content
-        while(expenditureList.firstChild) {
-            expenditureList.remove(expenditureList.firstChild)
+        while( expenditureList.firstChild ) {
+            expenditureList.removeChild(expenditureList.firstChild)
         }
     }
 }
