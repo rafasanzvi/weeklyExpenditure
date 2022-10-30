@@ -14,6 +14,7 @@ function eventListener() {
 
 //Classes
 class Budget {
+
     constructor(budget) {
         this.budget = Number(budget)
         this.remainder = Number(budget)
@@ -21,8 +22,19 @@ class Budget {
     }
 
     addExpenses(expenditure) {
+
         this.expenses = [...this.expenses, expenditure]
-        console.log("I am the expenses object", this.expenses)
+        
+        this.calculateRemainder()
+    }
+
+    calculateRemainder() {
+        //Getting how much money we have spent
+        let initialMoneySpent = 0
+        const moneySpent = this.expenses.reduce((total, expenditure) => total + expenditure.expenditureQuantity, initialMoneySpent)
+        
+        this.remainder = this.budget - moneySpent
+
     }
 }
 
@@ -77,7 +89,7 @@ class UI {
             newExpenditure.dataset.id = id
 
             //Add the expenditure HTML
-            newExpenditure.innerHTML = `${expenditureName} <span class="badge badge-primary badge-pill"> ${expenditureQuantity} </span>`
+            newExpenditure.innerHTML = `<span class="font-weight-bold text-capitalize">${expenditureName}</span> <span class="badge badge-primary badge-pill"> $ ${expenditureQuantity} </span>`
 
             //Buttom to delete the expenditure
             const btnDelete = document.createElement("button")
@@ -97,6 +109,10 @@ class UI {
         while( expenditureList.firstChild ) {
             expenditureList.removeChild(expenditureList.firstChild)
         }
+    }
+
+    updateRemainder(remainder) {
+        document.querySelector("#restante").textContent = remainder
     }
 }
 
@@ -149,8 +165,11 @@ function addExpenditure(e) {
     ui.printAlert("Expenditure added correctly")
 
     //Print the expenditure
-    const { expenses } = budget
+    const { expenses, remainder } = budget
+
     ui.addExpenditureList(expenses)
+
+    ui.updateRemainder(remainder)
 
     form.reset()
 }
