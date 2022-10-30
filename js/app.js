@@ -34,7 +34,12 @@ class Budget {
         const moneySpent = this.expenses.reduce((total, expenditure) => total + expenditure.expenditureQuantity, initialMoneySpent)
         
         this.remainder = this.budget - moneySpent
+    }
 
+    deleteExpenditure(idElementToDelete) {
+        this.expenses = this.expenses.filter(expenditure => expenditure.id !== idElementToDelete)
+
+        
     }
 }
 
@@ -71,7 +76,7 @@ class UI {
         }, 3000)
     }
 
-    addExpenditureList(expenses) {
+    showExpenditures(expenses) {
 
         //This is to call the cleanHTML method through expenses(it is part of the budget object)
         this.cleanHTML()
@@ -94,6 +99,9 @@ class UI {
             //Buttom to delete the expenditure
             const btnDelete = document.createElement("button")
             btnDelete.classList.add("btn", "btn-danger", "borrar-gasto")
+            btnDelete.onclick = () => {
+                deleteExpenditure(id)
+            }
             btnDelete.innerHTML = "Delete &times"
 
             newExpenditure.appendChild(btnDelete)
@@ -188,12 +196,21 @@ function addExpenditure(e) {
     //Print the expenditure
     const { expenses, remainder } = budget
 
-    ui.addExpenditureList(expenses)
+    ui.showExpenditures(expenses)
 
     ui.updateRemainder(remainder)
 
     ui.checkBudget(budget)
 
     form.reset()
+}
+
+function deleteExpenditure(idElementToDelete) {
+    // Delete the expenses from the class or better said from the object
+    budget.deleteExpenditure(idElementToDelete)
+
+    // Delete the expenses from HTML through filter
+    const { expenses } = budget
+    ui.showExpenditures(expenses)
 }
 
