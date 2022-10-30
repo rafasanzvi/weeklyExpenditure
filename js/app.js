@@ -103,9 +103,9 @@ class UI {
         });
     }
 
-    //We have to create a function to clean HTML, because otherwise the append child will repeat the expenses
+    // We have to create a function to clean HTML, because otherwise the append child will repeat the expenses
     cleanHTML() {
-        //While expenditure list have something remove his content
+        // While expenditure list have something remove his content
         while( expenditureList.firstChild ) {
             expenditureList.removeChild(expenditureList.firstChild)
         }
@@ -113,6 +113,27 @@ class UI {
 
     updateRemainder(remainder) {
         document.querySelector("#restante").textContent = remainder
+    }
+
+    checkBudget(budgetObj) {
+        const { budget, remainder } = budgetObj
+
+        const remainderDiv = document.querySelector(".restante")
+
+        // Check 25%
+        if((budget / 4) > remainder) {
+            remainderDiv.classList.remove("alert-success", "alert-warning")
+            remainderDiv.classList.add("alert-danger")
+        } else if((budget / 2) > remainder) {
+            remainderDiv.classList.remove("alert-success")
+            remainderDiv.classList.add("alert-warning")
+        }
+
+        // If the budget is 0 or lower
+        if(remainder <= 0) {
+            ui.printAlert("You have not budget :(", "error")
+            form.querySelector('button[type="submit"]').disabled = true
+        }
     }
 }
 
@@ -170,6 +191,8 @@ function addExpenditure(e) {
     ui.addExpenditureList(expenses)
 
     ui.updateRemainder(remainder)
+
+    ui.checkBudget(budget)
 
     form.reset()
 }
