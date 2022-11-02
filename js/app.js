@@ -38,8 +38,8 @@ class Budget {
 
     deleteExpenditure(idElementToDelete) {
         this.expenses = this.expenses.filter(expenditure => expenditure.id !== idElementToDelete)
-
         
+        this.calculateRemainder()
     }
 }
 
@@ -135,6 +135,9 @@ class UI {
         } else if((budget / 2) > remainder) {
             remainderDiv.classList.remove("alert-success")
             remainderDiv.classList.add("alert-warning")
+        } else {
+            remainderDiv.classList.remove("alert-danger", "alert-warning")
+            remainderDiv.classList.add("alert-success")
         }
 
         // If the budget is 0 or lower
@@ -210,7 +213,11 @@ function deleteExpenditure(idElementToDelete) {
     budget.deleteExpenditure(idElementToDelete)
 
     // Delete the expenses from HTML through filter
-    const { expenses } = budget
+    const { expenses, remainder } = budget
     ui.showExpenditures(expenses)
+
+    ui.updateRemainder(remainder)
+
+    ui.checkBudget(budget)
 }
 
